@@ -1,0 +1,58 @@
+version: "3.8"
+name: prueba
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+services:
+  php:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www/html
+    environment:
+      - XDG_CONFIG_HOME=/some/writeable/directory
+    restart: unless-stopped
+    logging: *default-logging
+    volumes:
+      - ../prueba-api:/var/www/html
+    ports:
+      - "9000:80"
+    networks:
+      - app-net
+  db:
+    image: mariadb
+    restart: always
+    logging: *default-logging
+    environment:
+      MARIADB_DATABASE: prueba
+      MARIADB_USER: italoramirezp
+      MARIADB_ROOT_PASSWORD: 1234
+    volumes:
+      - ./db/scripts:/docker-entrypoint-initdb.d
+      - ./db/conf:/etc/mysql/conf.d/
+      - ./db/data:/var/lib/mysql
+    ports:
+      - 3310:3306
+    networks:
+      - app-net
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    logging: *default-logging
+    volumes:
+      - ../prueba-api:/var/www/html
+      - ./nginx:/etc/nginx/conf.d/
+    ports:
+      - "8000:80"
+    networks:
+      - app-net
+    depends_on:
+      - php
+volumes:
+  db:
+networks:
+  app-net:
+    driver: bridge
+    name: prueba-net
