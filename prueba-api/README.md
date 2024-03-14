@@ -29,7 +29,7 @@
        php artisan key:generate
     ```
 
-  5 . Correr migraciones y seeders ya que este contiene el usuario para el acceso inicial
+  5 . Ejecutar migraciones y seeders ya que este contiene el usuario para el acceso inicial
 ```sh
     php artisan migrate
     php artisan db:seed --class=UserSeeder
@@ -44,4 +44,15 @@
     DB_DATABASE=
     DB_USERNAME=
     DB_PASSWORD=
+```
+
+8 .Ejecutar php artisan passport:install
+```sh
+    php artisan passport:install
+```
+
+9. Ingresar las keys generadas en el archivo .env
+```sh
+    PASSPORT_CLIENT_ID=
+    PASSPORT_CLIENT_SECRET=
 ```
