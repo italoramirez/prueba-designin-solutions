@@ -85,7 +85,7 @@ const loadUser = async (id: number) => {
 }
 
 const validateEmail = (email) => {
-  const re =/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i
+  const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
   return re.test(String(email).toLowerCase());
 }
 
@@ -94,7 +94,7 @@ const validate = () => {
     errors.name = 'El nombre es requerido'
     return false
   }
-  if (!model.email || validateEmail(model.email)) {
+  if (!model.email /*|| validateEmail(model.email)*/) {
     errors.email = 'El email es requerido o no es válido'
     return false
   }
